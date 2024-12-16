@@ -1,0 +1,72 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: trino-headless
+spec:
+  clusterIP: None 
+  ports:
+    - port: 8080
+      targetPort: 8080
+  selector:
+    app: trino-coordinator
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: trino-coordinator
+spec:
+  type: ClusterIP
+  ports:
+    - port: 8080
+      targetPort: 8080
+      protocol: TCP
+  selector:
+    app: trino-coordinator
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: trino-coordinator
+  labels:
+    app: trino-coordinator
+spec:
+  serviceName: trino-headless
+  replicas: 1
+  selector:
+    matchLabels:
+      app: trino-coordinator
+  template:
+    metadata:
+      labels:
+        app: trino-coordinator
+    spec:
+      containers:
+        - name: trino-coordinator
+          image: apache/custom-trino:2.0
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 8080
+          resources:
+            requests:
+              memory: 2Gi
+              cpu: 1
+            limits:
+              memory: 2Gi
+              cpu: 1
+          env:
+            - name: NODE_ID
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+          volumeMounts:
+            - name: trino-coordinator-config
+              mountPath: /opt/trino/etc/
+            - name: trino-coordinator-catalog-config
+              mountPath: /opt/trino/etc/catalog/
+      volumes:
+        - name: trino-coordinator-config
+          configMap:
+            name: trino-coordinator-config
+        - name: trino-coordinator-catalog-config
+          configMap:
+            name: trino-coordinator-catalog-config

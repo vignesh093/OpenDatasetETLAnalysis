@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: spark-master-deployment
+  labels:
+    app: spark-master
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: spark-master
+      component: spark-master
+  template:
+    metadata:
+      labels:
+        app: spark-master
+        component: spark-master
+    spec:
+      hostname: spark-master
+      subdomain: spark-master-headless
+      containers:
+        - name: spark-master
+          image: apache/spark-custom:3.0
+          imagePullPolicy: Never 
+          command:
+            - "/opt/spark/bin/spark-class"
+            - "org.apache.spark.deploy.master.Master"
+            - "--ip"
+            - "spark-master"
+            - "--port"
+            - "7077"
+            - "--webui-port"
+            - "8080"
+          ports:
+            - containerPort: 7077
+            - containerPort: 8080
+            - containerPort: 6066
+          resources:
+            requests:
+              memory: 2Gi
+              cpu: 1
+            limits:
+              memory: 2Gi
+              cpu: 1
+
+

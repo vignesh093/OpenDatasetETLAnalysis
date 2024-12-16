@@ -1,0 +1,43 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+  <modelVersion>4.0.0</modelVersion>
+    <artifactId>spark-dependencies</artifactId>
+  <version>1.0</version>
+  <packaging>jar</packaging>
+
+    <repositories>
+        <repository>
+            <id>${distMgmtSnapshotsId}</id>
+            <name>${distMgmtSnapshotsName}</name>
+            <url>${distMgmtSnapshotsUrl}</url>
+        </repository>
+    </repositories>
+    <properties>
+        <distMgmtSnapshotsId>apache.snapshots.https</distMgmtSnapshotsId>
+        <distMgmtSnapshotsName>Apache Development Snapshot Repository</distMgmtSnapshotsName>
+        <distMgmtSnapshotsUrl>https://repository.apache.org/content/repositories/snapshots</distMgmtSnapshotsUrl>
+        <distMgmtStagingId>apache.staging.https</distMgmtStagingId>
+        <distMgmtStagingName>Apache Release Distribution Repository</distMgmtStagingName>
+        <distMgmtStagingUrl>https://repository.apache.org/service/local/staging/deploy/maven2</distMgmtStagingUrl>
+    </properties>
+  <dependencies>
+    <dependency>
+        <groupId>org.apache.hadoop</groupId>
+        <artifactId>hadoop-aws</artifactId>
+        <version>3.3.4</version>
+    </dependency>
+    <dependency>
+        <groupId>org.apache.iceberg</groupId>
+        <artifactId>iceberg-spark-runtime-3.5_2.12</artifactId>
+        <version>1.7.1</version>
+    </dependency>
+    <dependency>
+        <groupId>org.apache.iceberg</groupId>
+        <artifactId>iceberg-aws-bundle</artifactId>
+        <version>1.7.1</version>
+    </dependency>
+
+</dependencies>
+</project>
+
